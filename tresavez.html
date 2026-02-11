@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Três Aves Maria</title>
+
+<style>
+
+/* ----- ESTILO GERAL ----- */
+
+body{
+    font-family: Arial;
+    margin:0;
+    padding:0;
+    background:#e3f2fd;
+}
+
+header{
+    background:#d490f9;
+    padding:20px;
+    text-align:center;
+    color:white;
+}
+
+header img{
+    width:120px;
+    margin-bottom:10px;
+}
+
+.menu{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    background:#dd02fe;
+    padding:10px;
+}
+
+.menu button{
+    margin:10px;
+    padding:10px 20px;
+    border:none;
+    background:#d000ff;
+    color:white;
+    cursor:pointer;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.menu button:hover{
+    background:#1e88e5;
+}
+
+.aba{
+    display:none;
+    padding:20px;
+    animation: aparecer 0.5s;
+}
+
+@keyframes aparecer{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.ativa{
+    display:block;
+}
+
+/* ----- PRODUTOS ----- */
+
+.produto{
+    border:1px solid #fd03dc;
+    background:white;
+    padding:10px;
+    margin:10px;
+    display:inline-block;
+    width:220px;
+    text-align:center;
+    border-radius:10px;
+}
+
+.produto img{
+    width:150px;
+    height:150px;
+    border-radius:10px;
+}
+
+button{
+    background:#f8028a;
+    color:white;
+    border:none;
+    padding:8px;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+.remover{
+    background:red;
+}
+
+/* ----- WHATSAPP BOTÃO ----- */
+
+.whats{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25d366;
+    color:white;
+    padding:15px;
+    border-radius:50%;
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* ----- RESPONSIVO ----- */
+
+@media(max-width:600px){
+    .produto{
+        width:90%;
+    }
+}
+
+footer{
+    background:#b303d7;
+    text-align:center;
+    padding:15px;
+    color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<!-- LOGO (troque depois) -->
+<img src="https://via.placeholder.com/120" alt="Logo">
+
+<h1>Três Aves Maria</h1>
+<p>Terços artesanais feitos com amor e fé</p>
+<p><b>CEO:</b> Lívia</p>
+
+</header>
+
+<div class="menu">
+    <button onclick="mudarAba('produtos')">Produtos</button>
+    <button onclick="mudarAba('carrinho')">Carrinho</button>
+    <button onclick="mudarAba('sobre')">Sobre Nós</button>
+    <button onclick="mudarAba('contato')">Contato</button>
+</div>
+
+<!-- ABA PRODUTOS -->
+<div id="produtos" class="aba ativa">
+
+<h2>Nossos Terços</h2>
+
+<div class="produto">
+<img src="https://via.placeholder.com/150">
+<p>Terço Azul Bebê</p>
+<p>R$ 35,00</p>
+<button onclick="addCarrinho('Terço Azul Bebê',35)">Adicionar</button>
+</div>
+
+<div class="produto">
+<img src="https://via.placeholder.com/150">
+<p>Terço Branco</p>
+<p>R$ 40,00</p>
+<button onclick="addCarrinho('Terço Branco',40)">Adicionar</button>
+</div>
+
+<div class="produto">
+<img src="https://via.placeholder.com/150">
+<p>Terço Personalizado</p>
+<p>R$ 50,00</p>
+<button onclick="addCarrinho('Terço Personalizado',50)">Adicionar</button>
+</div>
+
+</div>
+
+<!-- ABA CARRINHO -->
+<div id="carrinho" class="aba">
+
+<h2>Seu Carrinho</h2>
+
+<ul id="lista"></ul>
+
+<p><b>Total:</b> R$ <span id="total">0</span></p>
+<p><b>Frete:</b> GRÁTIS</p>
+
+<button onclick="finalizarPedido()">Finalizar Pedido</button>
+
+<h3>Pagamento via PIX</h3>
+
+<p>Chave PIX: <b>11999999999</b></p>
+
+<!-- QR CODE EXEMPLO -->
+<img src="https://via.placeholder.com/180" alt="QR PIX">
+
+</div>
+
+<!-- ABA SOBRE -->
+<div id="sobre" class="aba">
+
+<h2>Sobre Nós</h2>
+
+<p>
+A Três Aves Maria nasceu do amor pela fé e pela oração.
+Produzimos terços artesanais com carinho e dedicação,
+levando espiritualidade para sua casa e sua família.
+</p>
+
+<p>
+Cada peça é feita manualmente, pensando em qualidade,
+beleza e significado.
+</p>
+
+</div>
+
+<!-- ABA CONTATO -->
+<div id="contato" class="aba">
+
+<h2>Contato</h2>
+
+<p><b>Instagram:</b> @tresavesmaria</p>
+<p><b>WhatsApp:</b> (11) 99999-9999</p>
+<p><b>Responsável:</b> Lívia</p>
+
+</div>
+
+<footer>
+Três Aves Maria - Todos os direitos reservados
+</footer>
+
+<!-- BOTÃO WHATSAPP FLUTUANTE -->
+<div class="whats" onclick="abrirWhats()">
+💬
+</div>
+
+<script>
+
+let carrinho = [];
+let total = 0;
+
+function mudarAba(id){
+
+    let abas = document.getElementsByClassName("aba");
+
+    for(let i = 0; i < abas.length; i++){
+        abas[i].classList.remove("ativa");
+    }
+
+    document.getElementById(id).classList.add("ativa");
+}
+
+function addCarrinho(nome, preco){
+
+    carrinho.push({nome, preco});
+    atualizarCarrinho();
+    alert("Produto adicionado ao carrinho!");
+}
+
+function removerItem(index){
+    carrinho.splice(index, 1);
+    atualizarCarrinho();
+}
+
+function atualizarCarrinho(){
+
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    total = 0;
+
+    carrinho.forEach((item, index) => {
+
+        let li = document.createElement("li");
+
+        li.innerHTML =
+        item.nome + " - R$ " + item.preco +
+        ` <button class='remover' onclick='removerItem(${index})'>X</button>`;
+
+        lista.appendChild(li);
+
+        total += item.preco;
+    });
+
+    document.getElementById("total").innerHTML = total;
+}
+
+function finalizarPedido(){
+
+    if(carrinho.length === 0){
+        alert("Carrinho vazio!");
+        return;
+    }
+
+    let mensagem = "Olá, quero fazer um pedido:%0A";
+
+    carrinho.forEach(item => {
+        mensagem += "- " + item.nome + " - R$ " + item.preco + "%0A";
+    });
+
+    mensagem += "%0ATotal: R$ " + total;
+    mensagem += "%0AFrete: GRÁTIS";
+
+    let telefone = "11999999999";
+
+    let url = "https://wa.me/" + telefone + "?text=" + mensagem;
+
+    window.open(url);
+
+    carrinho = [];
+    atualizarCarrinho();
+}
+
+function abrirWhats(){
+    window.open("https://wa.me/11999999999");
+}
+
+</script>
+
+</body>
+</html>
